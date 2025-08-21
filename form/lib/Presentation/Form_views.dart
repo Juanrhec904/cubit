@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'Presentation/salario_views.dart';
-import 'Presentation/Form_views.dart';
 
-void main(){
-runApp(MyApp());
+class Form extends StatelessWidget {
+  const Form({
+    super.key,
+  });
 
-}
-
-class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         body: Column(
           children: [
-            Text("holis")
+            Text("hola mundo")
           ],
         ),
       ),
     );
   }
-
 }
 
