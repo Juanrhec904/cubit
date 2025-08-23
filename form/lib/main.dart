@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:form/presentation/salario_view.dart';
 import 'bloc/formulario_bloc.dart';
 import 'cubit/salario_cubit.dart';
 import 'Presentation/form_view.dart';
@@ -22,7 +21,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: const SalarioView()
+        home: const FormView()
     )
     );
   }

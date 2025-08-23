@@ -1,29 +1,29 @@
 part of 'Formulario_bloc.dart';
 
-sealed class FormState extends Equatable {
-  const FormState();
+sealed class FormularioState extends Equatable {
+  const FormularioState();
 
   @override
   List<Object?> get props => [];
 }
 
-final class FormInitial extends FormState {}
+final class FormularioInitial extends FormularioState {}
 
-final class FormSuccess extends FormState {
+final class FormularioSuccess extends FormularioState {
   final double total;
-  const FormSuccess(this.total);
+  const FormularioSuccess(this.total);
 
   @override
   List<Object?> get props => [total];
 }
 
-final class FormLoading extends FormState {
-  const FormLoading();
+final class FormularioLoading extends FormularioState {
+  const FormularioLoading();
 }
 
-final class FormFailure extends FormState {
+final class FormularioFailure extends FormularioState {
   final String error;
-  const FormFailure(this.error);
+  const FormularioFailure(this.error);
 
   @override
   List<Object?> get props => [error];

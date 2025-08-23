@@ -1,48 +1,48 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:form/modelo/modelo.dart';
+
 part 'Formulario_event.dart';
 part 'Formulario_state.dart';
 
-class FormBloc extends Bloc<FormEvent, FormState> {
-  FormBloc() : super(FormInitial()) {
-
-    // aquí registramos el evento
+class FormBloc extends Bloc<FormEvent, FormularioState> {
+  FormBloc() : super(FormularioInitial()) {
     on<Calcular_Salario>(_onCalcularSalario);
   }
 
   Future<void> _onCalcularSalario(
     Calcular_Salario event,
-    Emitter<FormState> emit,
+    Emitter<FormularioState> emit,
   ) async {
+    
     try {
-      // Mostramos loading
-      emit(FormLoading());
+      // loading
+      emit(FormularioLoading());
 
-      // Simulamos petición a backend con un delay
+      // simular petición
       await Future.delayed(const Duration(seconds: 3));
 
-      // Creamos el usuario
+      // datos del usuario desde el evento
       final usuario = Usuario(
-        nombre: "Juan", // luego lo traerás del form
-        apellido: "Perez",
+        nombre: event.nombre,
+        apellido: event.apellido,
         salario: event.salario,
         bono: event.bono,
       );
 
-      // Validación simple
+      // validación
       if (usuario.salario < 0 || usuario.bono < 0) {
-        emit(FormFailure("Los valores no pueden ser negativos"));
+        emit(const FormularioFailure('Los valores no pueden ser negativos'));
         return;
       }
 
-      // suma del salario y bono
+      // cálculo
       final total = usuario.salario + usuario.bono;
 
-      // Emitimos success
-      emit(FormSuccess(total));
+      // success
+      emit(FormularioSuccess(total));
     } catch (e) {
-      emit(FormFailure("Ocurrió un error: $e"));
+      emit(FormularioFailure('Ocurrió un error: $e'));
     }
   }
 }
