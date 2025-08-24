@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/Formulario_bloc.dart';
+import 'package:form/bloc/formulario_bloc.dart';
+
 
 class FormView extends StatefulWidget {
   const FormView({super.key});
@@ -31,12 +32,12 @@ class _FormViewState extends State<FormView> {
       appBar: AppBar(title: const Text("Formulario")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: BlocConsumer<FormBloc, FormularioState>(
+        child: BlocConsumer<FormularioBloc, FormularioState>(
           listener: (context, state) {
             if (state is FormularioFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.error)),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.error)));
             }
           },
           builder: (context, state) {
@@ -65,7 +66,9 @@ class _FormViewState extends State<FormView> {
                     ElevatedButton(
                       onPressed: () {
                         // Reinicia el formulario volviendo al estado inicial
-                        context.read<FormBloc>().emit(FormularioInitial());
+                        context.read<FormularioBloc>().emit(
+                          FormularioInitial(),
+                        );
                       },
                       child: const Text("Nuevo cálculo"),
                     ),
@@ -99,17 +102,17 @@ class _FormViewState extends State<FormView> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
+                      
                       // Se dispara el evento
-                      context.read<FormBloc>().add(
-                            Calcular_Salario(
-                              nombre: _nombreController.text,
-                              apellido: _apellidoController.text,
-                              salario:
-                                  double.tryParse(_salarioController.text) ?? 0,
-                              bono:
-                                  double.tryParse(_bonoController.text) ?? 0,
-                            ),
-                          );
+                      context.read<FormularioBloc>().add(
+                        CalcularSalario(
+                          nombre: _nombreController.text,
+                          apellido: _apellidoController.text,
+                          salario:
+                              double.tryParse(_salarioController.text) ?? 0,
+                          bono: double.tryParse(_bonoController.text) ?? 0,
+                        ),
+                      );
                     },
                     child: const Text("Calcular"),
                   ),

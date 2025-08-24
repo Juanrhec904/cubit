@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc/formulario_bloc.dart';
 import 'cubit/salario_cubit.dart';
 import 'Presentation/form_view.dart';
-import 'presentation/salario_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,13 +15,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => FormBloc()),
+        BlocProvider(create: (_) => (FormularioBloc())),
         BlocProvider(create: (_) => SalarioCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: const FormView()
-    )
+        home: const FormView(),
+      ),
     );
   }
 }

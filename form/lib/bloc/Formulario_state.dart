@@ -1,6 +1,8 @@
-part of 'Formulario_bloc.dart';
 
-sealed class FormularioState extends Equatable {
+part of 'formulario_bloc.dart';
+
+
+sealed class FormularioState extends Equatable{
   const FormularioState();
 
   @override
@@ -9,16 +11,14 @@ sealed class FormularioState extends Equatable {
 
 final class FormularioInitial extends FormularioState {}
 
+final class FormularioLoading extends FormularioState {}
+
 final class FormularioSuccess extends FormularioState {
   final double total;
   const FormularioSuccess(this.total);
 
   @override
   List<Object?> get props => [total];
-}
-
-final class FormularioLoading extends FormularioState {
-  const FormularioLoading();
 }
 
 final class FormularioFailure extends FormularioState {
