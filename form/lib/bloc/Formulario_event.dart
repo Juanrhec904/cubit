@@ -23,3 +23,5 @@ class CalcularSalario extends FormularioEvent {
   @override
   List<Object?> get props => [nombre, apellido, salario, bono];
 }
+
+class ResetFormulario extends FormularioEvent{}

@@ -9,35 +9,30 @@ part 'formulario_state.dart';
 
 class FormularioBloc extends Bloc<FormularioEvent, FormularioState> {
   FormularioBloc() : super(FormularioInitial()) {
-    on<CalcularSalario>(_onCalcularSalario);
-  }
+    on<ResetFormulario>((event, emit) {
+      emit(FormularioInitial());
+    });
 
-  Future<void> _onCalcularSalario(
-    CalcularSalario event,
-    Emitter<FormularioState> emit,
-  ) async {
-    try {
-      emit(FormularioLoading());
+    void _onCalcularSalario(
+      CalcularSalario event,
+      Emitter<FormularioState> emit,
+    ) {
+      try {
+        emit(FormularioLoading());
 
-      await Future.delayed(const Duration(seconds: 2));
+        final usuario = Usuario(
+          nombre: event.nombre,
+          apellido: event.apellido,
+          salario: event.salario,
+          bono: event.bono,
+        );
 
-      final usuario = Usuario(
-        nombre: event.nombre,
-        apellido: event.apellido,
-        salario: event.salario,
-        bono: event.bono,
-      );
+        final total = usuario.salario + usuario.bono;
 
-      if (usuario.salario < 0 || usuario.bono < 0) {
-        emit(FormularioFailure("Los valores no pueden ser negativos"));
-        return;
+        emit(FormularioSuccess(usuario, total));
+      } catch (e) {
+        emit(FormularioFailure("Error al calcular salario: $e"));
       }
-
-      final total = usuario.salario + usuario.bono;
-
-      emit(FormularioSuccess(total));
-    } catch (e) {
-      emit(FormularioFailure("Ocurrió un error: $e"));
     }
   }
 }
