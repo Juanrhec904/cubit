@@ -10,10 +10,13 @@ class Usuario {
     required this.salario,
     required this.bono,
   });
-  Map<String, dynamic> toJson() => {
-    'nombre': nombre,
-    'apellido': apellido,
-    'salario': salario,
-    'bono': bono,
-  };
+
+  factory Usuario.fromJson(Map<String, dynamic> json) {
+    return Usuario(
+      nombre: json["nombre"],
+      apellido: json["apellido"],
+      salario: json["salario"],
+      bono: json["bono"],
+    );
+  }
 }

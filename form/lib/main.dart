@@ -14,8 +14,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final api = SalarioApi('https://jsonkeeper.com/b/6RMTG');
-    
+    final api = SalarioService();
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => FormularioBloc()),

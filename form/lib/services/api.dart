@@ -1,23 +1,19 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:form/modelo/modelo.dart';
 
-class SalarioApi {
-  final String baseUrl;
-  SalarioApi(this.baseUrl);
+class SalarioService {
+  final String baseUrl = "https://jsonkeeper.com/b/IZW4A";
 
-  Future<double> calcularSalario(Usuario usuario) async {
-    final url = Uri.parse("$baseUrl/salario");
-
-    final response = await http.post(
-      url,
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(usuario.toJson()),
-    );
+  Future<double> obtenerSalario() async {
+    final response = await http.get(Uri.parse(baseUrl));
 
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return (data["total"] as num).toDouble();
+      final data = json.decode(response.body);
+
+      final saldo = (data["saldo"] as num).toDouble();
+      final bono = (data["bono"] as num).toDouble();
+
+      return saldo + bono;
     } else {
       throw Exception("Error en la API: ${response.statusCode}");
     }

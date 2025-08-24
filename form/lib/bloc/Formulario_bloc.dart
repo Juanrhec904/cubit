@@ -1,25 +1,19 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:form/bloc/formulario_bloc.dart';
 import 'package:form/modelo/modelo.dart';
-import 'package:meta/meta.dart';
 
 part 'formulario_event.dart';
 part 'formulario_state.dart';
 
 class FormularioBloc extends Bloc<FormularioEvent, FormularioState> {
   FormularioBloc() : super(FormularioInitial()) {
-    on<ResetFormulario>((event, emit) {
-      emit(FormularioInitial());
-    });
+    on<CalcularSalario>((event, emit) async {
+      emit(FormularioLoading());
+      await Future.delayed(const Duration(seconds: 1));
 
-    void _onCalcularSalario(
-      CalcularSalario event,
-      Emitter<FormularioState> emit,
-    ) {
-      try {
-        emit(FormularioLoading());
-
+      if (event.salario <= 0) {
+        emit(FormularioFailure("El salario debe ser mayor a 0"));
+      } else {
         final usuario = Usuario(
           nombre: event.nombre,
           apellido: event.apellido,
@@ -27,12 +21,16 @@ class FormularioBloc extends Bloc<FormularioEvent, FormularioState> {
           bono: event.bono,
         );
 
-        final total = usuario.salario + usuario.bono;
+        final total = event.salario + event.bono; 
 
-        emit(FormularioSuccess(usuario, total));
-      } catch (e) {
-        emit(FormularioFailure("Error al calcular salario: $e"));
+        emit(FormularioSuccess(usuario, total)); 
       }
-    }
+    });
+
+    on<ResetFormulario>((event, emit) async {
+      emit(FormularioLoading());
+      await Future.delayed(const Duration(seconds: 1)); // ⏳ loading antes de resetear
+      emit(FormularioInitial());
+    });
   }
 }

@@ -1,7 +1,5 @@
 part of 'formulario_bloc.dart';
 
-import 'package:form/modelo/modelo.dart';
-
 sealed class FormularioState extends Equatable {
   const FormularioState();
 
