@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form/bloc/formulario_bloc.dart';
 import 'package:form/cubit/salario_cubit.dart';
-import 'package:form/Presentation/salario_view.dart'; 
+import 'package:form/Presentation/salario_view.dart';
 
 class FormView extends StatefulWidget {
   const FormView({super.key});
@@ -29,47 +29,69 @@ class _FormViewState extends State<FormView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Formulario")),
+      appBar: AppBar(title: const Text("Formulario + Resultado")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: BlocConsumer<FormularioBloc, FormularioState>(
-          listener: (context, state) {
-            if (state is FormularioFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.error)),
-              );
-            }
-
-            if (state is FormularioSuccess) {
-              context
-                  .read<SalarioCubit>()
-                  .cargarSalario(state.usuario, state.total);
-            }
-          },
-          builder: (context, state) {
-            if (state is FormularioLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            if (state is FormularioSuccess) {
-              return BlocBuilder<SalarioCubit, SalarioState>(
-                builder: (context, salarioState) {
-                  if (salarioState is SalarioLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (salarioState is SalarioSuccess) {
-                    return SalarioView(
-                      usuario: salarioState.usuario,
-                      total: salarioState.total,
+        child: Column(
+          children: [
+            // 🔹 Parte superior: Formulario
+            Expanded(
+              flex: 2,
+              child: BlocConsumer<FormularioBloc, FormularioState>(
+                listener: (context, state) {
+                  if (state is FormularioFailure) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(state.error)),
                     );
                   }
-                  return const SizedBox();
-                },
-              );
-            }
 
-            // Estado inicial con el formulario
-            return _formularioWidget();
-          },
+                  if (state is FormularioSuccess) {
+                    // 👉 Disparamos el cálculo del salario
+                    context.read<SalarioCubit>().cargarSalario(state.usuario);
+                  }
+                },
+                builder: (context, state) {
+                  return _formularioWidget();
+                },
+              ),
+            ),
+
+            const Divider(height: 30, thickness: 2),
+
+            // 🔹 Parte inferior: Resultado
+            Expanded(
+              flex: 1,
+              child: BlocBuilder<SalarioCubit, SalarioState>(
+                builder: (context, salarioState) {
+                  if (salarioState is SalarioLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (salarioState is SalarioSuccess) {
+                    return Center(
+                      child: Text(
+                        "${salarioState.usuario.nombre} ${salarioState.usuario.apellido} → Total: \$${salarioState.total.toStringAsFixed(2)}",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    );
+                  } else if (salarioState is SalarioFailure) {
+                    return Center(
+                      child: Text(
+                        "Error: ${salarioState.error}",
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    );
+                  }
+                  return const Center(
+                    child: Text("Ingrese datos y presione Calcular"),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
