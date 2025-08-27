@@ -19,12 +19,12 @@ class SalarioView extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("👤 ${usuario.nombre} ${usuario.apellido}",
+        Text("${usuario.nombre} ${usuario.apellido}",
             style: const TextStyle(fontSize: 20)),
         const SizedBox(height: 10),
-        Text("💰 Salario: ${usuario.salario.toStringAsFixed(2)}"),
-        Text("🎁 Bono: ${usuario.bono.toStringAsFixed(2)}"),
-        Text("✅ Total: $total",
+        Text("Salario: ${usuario.salario.toStringAsFixed(2)}"),
+        Text("Bono: ${usuario.bono.toStringAsFixed(2)}"),
+        Text("Total: $total",
             style: const TextStyle(
                 fontSize: 22, fontWeight: FontWeight.bold)),
         const SizedBox(height: 20),

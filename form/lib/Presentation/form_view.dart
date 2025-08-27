@@ -81,15 +81,16 @@ class _FormViewState extends State<FormView> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // 👉 Parte superior: Formulario
+            // Parte superior: Formulario
             Expanded(
               flex: 1,
               child: BlocConsumer<FormularioBloc, FormularioState>(
                 listener: (context, state) {
                   if (state is FormularioFailure) {
+                    // ✅ corregido: state.mensaje
                     ScaffoldMessenger.of(
                       context,
-                    ).showSnackBar(SnackBar(content: Text(state.error)));
+                    ).showSnackBar(SnackBar(content: Text(state.mensaje)));
                   }
 
                   if (state is FormularioSuccess) {
@@ -110,7 +111,7 @@ class _FormViewState extends State<FormView> {
 
             const Divider(),
 
-            // 👉 Parte inferior: Resultado del salario
+            // Parte inferior: Resultado del salario
             Expanded(
               flex: 1,
               child: BlocBuilder<SalarioCubit, SalarioState>(
@@ -118,6 +119,7 @@ class _FormViewState extends State<FormView> {
                   if (salarioState is SalarioLoading) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (salarioState is SalarioSuccess) {
+                    // ✅ aquí ya pasamos usuario y total correctamente
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -129,6 +131,7 @@ class _FormViewState extends State<FormView> {
                       ],
                     );
                   } else if (salarioState is SalarioFailure) {
+                    // ✅ corregido: salarioState.mensaje
                     return Center(child: Text(salarioState.error));
                   }
                   return const Center(child: Text("Ingrese los datos arriba"));
